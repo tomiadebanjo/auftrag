@@ -4,7 +4,7 @@ enum ErrorTypes {
   ServerError = 500,
 }
 
-class ServerError extends Error {
+class CustomError extends Error {
   code: ErrorTypes;
 
   constructor(message: string, code?: ErrorTypes) {
@@ -20,16 +20,16 @@ class ServerError extends Error {
   }
 }
 
-class BadRequestError extends ServerError {
+class BadRequestError extends CustomError {
   constructor(message: string) {
     super(message, ErrorTypes.BadRequest);
   }
 }
 
-class UnauthorizedError extends ServerError {
+class UnauthorizedError extends CustomError {
   constructor(message: string) {
     super(message, ErrorTypes.NotFound);
   }
 }
 
-export { BadRequestError, ServerError, UnauthorizedError, ErrorTypes };
+export { BadRequestError, CustomError, UnauthorizedError, ErrorTypes };
