@@ -62,3 +62,7 @@ typings/
 
 #dist - compiled javascript folder
 dist
+build
+
+# Code editor files
+.vscode

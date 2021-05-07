@@ -1,5 +1,6 @@
 enum ErrorTypes {
   BadRequest = 400,
+  Unauthorized = 401,
   NotFound = 404,
   ServerError = 500,
 }
@@ -28,8 +29,20 @@ class BadRequestError extends CustomError {
 
 class UnauthorizedError extends CustomError {
   constructor(message: string) {
+    super(message, ErrorTypes.Unauthorized);
+  }
+}
+
+class NotfoundError extends CustomError {
+  constructor(message: string) {
     super(message, ErrorTypes.NotFound);
   }
 }
 
-export { BadRequestError, CustomError, UnauthorizedError, ErrorTypes };
+export {
+  BadRequestError,
+  CustomError,
+  UnauthorizedError,
+  NotfoundError,
+  ErrorTypes,
+};

@@ -6,12 +6,14 @@ import cors from 'cors';
 import errorHandler from './middleware/errorHandler';
 import HttpResponder from './utils/HttpResponder';
 import routes from './routes';
+import AppSecrets from './utils/secrets';
 
 dotenv.config();
 
 const app: Express = express();
 
-const PORT = process.env.PORT || 3000;
+const { PORT } = AppSecrets;
+
 app.set('port', PORT);
 
 app.use(cors());

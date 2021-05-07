@@ -1,5 +1,5 @@
 import express from 'express';
-import { CustomError } from '../utils/exceptions';
+import { CustomError, ErrorTypes } from '../utils/exceptions';
 import HttpResponder from '../utils/HttpResponder';
 import logger from '../utils/logger';
 
@@ -15,9 +15,9 @@ const errorHandler = (
     return new HttpResponder(res).fail(code, message);
   }
 
-  logger.error(err.message);
+  logger.error(`${err.code ? err.code + ' ' : ''}${err.stack}`);
   const errorMessage = 'Something went wrong, try again.';
-  return new HttpResponder(res).fail(500, errorMessage);
+  return new HttpResponder(res).fail(ErrorTypes.ServerError, errorMessage);
 };
 
 export default errorHandler;
