@@ -14,7 +14,7 @@ class OrdersController {
     }
   }
 
-  static async updateOrders(
+  static async updateOrder(
     req: Request,
     res: Response,
     next: NextFunction

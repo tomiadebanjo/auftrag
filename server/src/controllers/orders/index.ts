@@ -3,7 +3,7 @@ import OrdersController from './orders.controller';
 
 const ordersRouter = express.Router();
 
-ordersRouter.post('/', OrdersController.updateOrders);
-ordersRouter.put('/:id', OrdersController.updateOrders);
+ordersRouter.post('/', OrdersController.createOrder);
+ordersRouter.put('/:id', OrdersController.updateOrder);
 
 export default ordersRouter;

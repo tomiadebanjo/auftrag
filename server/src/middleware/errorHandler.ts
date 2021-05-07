@@ -5,8 +5,9 @@ import logger from '../utils/logger';
 
 const errorHandler = (
   err: any,
-  req: express.Request,
-  res: express.Response
+  _req: express.Request,
+  res: express.Response,
+  _next: express.NextFunction
 ): void => {
   if (err instanceof CustomError) {
     const { name, message, code } = err;
@@ -14,7 +15,7 @@ const errorHandler = (
     return new HttpResponder(res).fail(code, message);
   }
 
-  logger.error(err);
+  logger.error(err.message);
   const errorMessage = 'Something went wrong, try again.';
   return new HttpResponder(res).fail(500, errorMessage);
 };

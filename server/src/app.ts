@@ -23,13 +23,13 @@ app.use(express.urlencoded({ extended: true }));
 routes(app);
 
 app.get('/', (req: Request, res: Response) => {
-  new HttpResponder(res).success(200, 'Welcome to Auftrag API!');
+  return new HttpResponder(res).success(200, 'Welcome to Auftrag API!');
 });
 
 app.use(errorHandler);
 
-app.all('*', (req, res) => {
-  new HttpResponder(res).fail(404, 'Route not found!');
+app.all('*', (req: Request, res: Response) => {
+  return new HttpResponder(res).fail(404, 'Route not found!');
 });
 
 export default app;

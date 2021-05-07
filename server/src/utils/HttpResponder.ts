@@ -8,12 +8,12 @@ class HttpResponder {
   }
 
   private createResponse(
-    success: boolean,
+    status: boolean,
     message: string,
     data?: unknown
-  ): { success: boolean; message: string; data?: unknown } {
+  ): { status: boolean; message: string; data?: unknown } {
     return {
-      success,
+      status,
       message,
       data,
     };
