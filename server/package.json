@@ -37,6 +37,7 @@
     "cross-env": "^7.0.3",
     "dotenv": "^8.5.1",
     "express": "^4.17.1",
+    "express-validator": "^6.11.0",
     "firebase-admin": "^9.7.0",
     "helmet": "^4.6.0",
     "rimraf": "^3.0.2",
