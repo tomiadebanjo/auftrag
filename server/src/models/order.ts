@@ -1,4 +1,5 @@
 export interface Order {
+  uid?: string;
   id?: string;
   title?: string;
   customer?: {

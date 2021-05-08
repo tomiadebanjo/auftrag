@@ -34,6 +34,22 @@ class OrdersController {
       next(error);
     }
   }
+
+  static async getOrder(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const id = req.params.id;
+
+      const order = await OrderService.getOrder(id);
+
+      return new HttpResponder(res).success(200, 'Order retrieved', order);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export default OrdersController;

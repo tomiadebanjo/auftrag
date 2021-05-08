@@ -14,8 +14,10 @@ export default class OrdersPersistence {
     return null;
   }
 
-  static async createOrder(data: Order) {
-    // const orderCreate = await firestore.collection()
-    return;
+  static async createOrder(data: Order): Promise<any> {
+    const orderRef = await firestore.collection('orders').add(data);
+    const newOrder = await orderRef.get();
+
+    return { uid: newOrder.id, ...newOrder.data() };
   }
 }
