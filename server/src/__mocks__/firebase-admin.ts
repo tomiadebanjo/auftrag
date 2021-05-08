@@ -8,12 +8,46 @@ firebase.auth = () => {
   };
 };
 
-firebase.firestore = () => {
+const store = () => {
   return {
-    verifyIdToken: async (id: string) => {
-      return { uid: id };
+    collection: (collectionName: string) => {
+      return {
+        collectionName,
+        doc: (docId: string) => {
+          return {
+            docId,
+            get: () => {
+              return {
+                exists: true,
+                ref: {
+                  update: jest.fn((data: any) => {
+                    return {
+                      status: true,
+                      data,
+                    };
+                  }),
+                },
+              };
+            },
+          };
+        },
+      };
     },
   };
 };
+
+const storeTWO = () => {
+  return {
+    collection: jest.fn(() => ({
+      doc: jest.fn(() => ({
+        get: jest.fn(() => ({
+          update: jest.fn(() => 'trdu'),
+        })),
+      })),
+    })),
+  };
+};
+
+firebase.firestore = store;
 
 export default firebase;
