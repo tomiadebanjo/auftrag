@@ -12,7 +12,8 @@ dotenv.config();
 
 const app: Express = express();
 
-const { PORT } = AppSecrets;
+// const { PORT } = AppSecrets;
+const PORT = process.env.PORT || 4000;
 
 app.set('port', PORT);
 

@@ -14,7 +14,7 @@ const getSecretAndThrowIfUndefined = (secret: string) => {
 };
 
 const AppSecrets = {
-  PORT: getSecretAndThrowIfUndefined('PORT'),
+  // PORT: getSecretAndThrowIfUndefined('PORT'),
   FIREBASE_TYPE: getSecretAndThrowIfUndefined('FIREBASE_TYPE'),
   FIREBASE_PROJECT_ID: getSecretAndThrowIfUndefined('FIREBASE_PROJECT_ID'),
   FIREBASE_PRIVATE_KEY_ID: getSecretAndThrowIfUndefined(
