@@ -1,6 +1,8 @@
 import request from 'supertest';
 import app from '../app';
 
+jest.mock('firebase-admin');
+
 describe('Server Endpoint tests', () => {
   it('should return the welcome response', async () => {
     const response = await request(app).get('/');
