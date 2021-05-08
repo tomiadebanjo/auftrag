@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import OrderService from '../../services/orders.service';
 import HttpResponder from '../../utils/HttpResponder';
 
 class OrdersController {
@@ -8,7 +9,12 @@ class OrdersController {
     next: NextFunction
   ): Promise<void> {
     try {
-      return new HttpResponder(res).success(200, 'Order update successful');
+      const data = await OrderService.createOrder(req.body);
+      return new HttpResponder(res).success(
+        201,
+        'Order created successful',
+        data
+      );
     } catch (error) {
       next(error);
     }
@@ -20,6 +26,9 @@ class OrdersController {
     next: NextFunction
   ): Promise<void> {
     try {
+      const id = req.params.id;
+      await OrderService.updateOrder(id, req.body);
+
       return new HttpResponder(res).success(200, 'Order update successful');
     } catch (error) {
       next(error);
