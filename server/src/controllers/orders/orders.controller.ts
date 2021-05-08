@@ -12,7 +12,7 @@ class OrdersController {
       const data = await OrderService.createOrder(req.body);
       return new HttpResponder(res).success(
         201,
-        'Order created successful',
+        'Order creation successful',
         data
       );
     } catch (error) {

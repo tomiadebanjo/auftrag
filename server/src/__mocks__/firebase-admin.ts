@@ -2,11 +2,33 @@ const firebase: any = jest.createMockFromModule('firebase-admin');
 
 firebase.auth = () => {
   return {
-    verifyIdToken: async (id: string) => {
+    verifyIdToken: jest.fn((id: string) => {
       return { uid: id };
-    },
+    }),
   };
 };
+
+const collectionGet = jest.fn(() => {
+  return {
+    id: 'mock-order',
+    exists: true,
+    ref: {
+      update: jest.fn((data: any) => {
+        return {
+          status: true,
+          data,
+        };
+      }),
+    },
+    data: jest.fn(() => {
+      return {
+        status: true,
+        id: 'mock-order',
+        title: 'mock-title',
+      };
+    }),
+  };
+});
 
 const store = () => {
   return {
@@ -16,35 +38,16 @@ const store = () => {
         doc: (docId: string) => {
           return {
             docId,
-            get: () => {
-              return {
-                exists: true,
-                ref: {
-                  update: jest.fn((data: any) => {
-                    return {
-                      status: true,
-                      data,
-                    };
-                  }),
-                },
-              };
-            },
+            get: collectionGet,
           };
         },
+        add: jest.fn((data: any) => {
+          return {
+            get: collectionGet,
+          };
+        }),
       };
     },
-  };
-};
-
-const storeTWO = () => {
-  return {
-    collection: jest.fn(() => ({
-      doc: jest.fn(() => ({
-        get: jest.fn(() => ({
-          update: jest.fn(() => 'trdu'),
-        })),
-      })),
-    })),
   };
 };
 
