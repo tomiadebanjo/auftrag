@@ -3,8 +3,17 @@ import OrdersPersistence from '../persistence/orders.persistence';
 import { CustomError, NotfoundError } from '../utils/exceptions';
 
 export default class OrderService {
-  static async createOrder(createData: Order): Promise<Order> {
-    return createData;
+  static async createOrder(createData: Order): Promise<any> {
+    const { title, bookingDate, address, customer } = createData;
+
+    const newOrder = await OrdersPersistence.createOrder({
+      title,
+      bookingDate,
+      address,
+      customer,
+    });
+
+    return newOrder;
   }
 
   static async updateOrder(
@@ -26,6 +35,23 @@ export default class OrderService {
       });
 
       return;
+    } catch (error) {
+      if (error instanceof CustomError) {
+        throw error;
+      }
+      throw new Error('Order update failed');
+    }
+  }
+
+  static async getOrder(orderId: string): Promise<Order> {
+    try {
+      const orderSnapshot = await OrdersPersistence.getOrder(orderId);
+
+      if (!orderSnapshot) {
+        throw new NotfoundError(`Order id: ${orderId} not found`);
+      }
+
+      return { uid: orderSnapshot.id, ...orderSnapshot.data() };
     } catch (error) {
       if (error instanceof CustomError) {
         throw error;

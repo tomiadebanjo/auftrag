@@ -9,6 +9,15 @@ ordersRouter.post(
   AuthMiddleware.verifyTokenId,
   OrdersController.createOrder
 );
-ordersRouter.put('/:id', OrdersController.updateOrder);
+ordersRouter.put(
+  '/:id',
+  AuthMiddleware.verifyTokenId,
+  OrdersController.updateOrder
+);
+ordersRouter.get(
+  '/:id',
+  AuthMiddleware.verifyTokenId,
+  OrdersController.getOrder
+);
 
 export default ordersRouter;
