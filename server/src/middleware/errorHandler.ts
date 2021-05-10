@@ -15,7 +15,7 @@ const errorHandler = (
     return new HttpResponder(res).fail(code, message);
   }
 
-  logger.error(`${err.code ? err.code + ' ' : ''}${err.stack}`);
+  logger.error(`${err.stack}`);
   const errorMessage = 'Something went wrong, try again.';
   return new HttpResponder(res).fail(ErrorTypes.ServerError, errorMessage);
 };

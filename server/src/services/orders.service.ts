@@ -1,19 +1,25 @@
 import { Order } from '../models/order';
 import OrdersPersistence from '../persistence/orders.persistence';
-import { CustomError, NotfoundError } from '../utils/exceptions';
+import { ClientError, NotfoundError, ServerError } from '../utils/exceptions';
+import logger from '../utils/logger';
 
 export default class OrderService {
   static async createOrder(createData: Order): Promise<any> {
-    const { title, bookingDate, address, customer } = createData;
+    try {
+      const { title, bookingDate, address, customer } = createData;
 
-    const newOrder = await OrdersPersistence.createOrder({
-      title,
-      bookingDate,
-      address,
-      customer,
-    });
+      const newOrder = await OrdersPersistence.createOrder({
+        title,
+        bookingDate,
+        address,
+        customer,
+      });
 
-    return newOrder;
+      return newOrder;
+    } catch (error) {
+      logger.error(error.message);
+      throw new ServerError('Order creation failed');
+    }
   }
 
   static async updateOrder(
@@ -36,10 +42,11 @@ export default class OrderService {
 
       return;
     } catch (error) {
-      if (error instanceof CustomError) {
+      if (error instanceof ClientError) {
         throw error;
       }
-      throw new Error('Order update failed');
+      logger.error(error.message);
+      throw new ServerError('Order update failed');
     }
   }
 
@@ -53,10 +60,11 @@ export default class OrderService {
 
       return { uid: orderSnapshot.id, ...orderSnapshot.data() };
     } catch (error) {
-      if (error instanceof CustomError) {
+      if (error instanceof ClientError) {
         throw error;
       }
-      throw new Error('Order update failed');
+      logger.error(error.message);
+      throw new ServerError(`Error fetching order with id: ${orderId}`);
     }
   }
 }

@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import { validationResult } from 'express-validator';
 import OrderService from '../../services/orders.service';
 import HttpResponder from '../../utils/HttpResponder';
 
@@ -9,6 +10,10 @@ class OrdersController {
     next: NextFunction
   ): Promise<void> {
     try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return new HttpResponder(res).fail(400, 'Bad request', errors.array());
+      }
       const data = await OrderService.createOrder(req.body);
       return new HttpResponder(res).success(
         201,
@@ -26,6 +31,10 @@ class OrdersController {
     next: NextFunction
   ): Promise<void> {
     try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return new HttpResponder(res).fail(400, 'Bad request', errors.array());
+      }
       const id = req.params.id;
       await OrderService.updateOrder(id, req.body);
 
@@ -41,6 +50,10 @@ class OrdersController {
     next: NextFunction
   ): Promise<void> {
     try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return new HttpResponder(res).fail(400, 'Bad request', errors.array());
+      }
       const id = req.params.id;
 
       const order = await OrderService.getOrder(id);
