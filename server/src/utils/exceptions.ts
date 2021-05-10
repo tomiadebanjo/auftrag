@@ -21,19 +21,31 @@ class CustomError extends Error {
   }
 }
 
-class BadRequestError extends CustomError {
+class ServerError extends CustomError {
+  constructor(message: string) {
+    super(message);
+  }
+}
+
+class ClientError extends CustomError {
+  constructor(message: string, code?: ErrorTypes) {
+    super(message, code);
+  }
+}
+
+class BadRequestError extends ClientError {
   constructor(message: string) {
     super(message, ErrorTypes.BadRequest);
   }
 }
 
-class UnauthorizedError extends CustomError {
+class UnauthorizedError extends ClientError {
   constructor(message: string) {
     super(message, ErrorTypes.Unauthorized);
   }
 }
 
-class NotfoundError extends CustomError {
+class NotfoundError extends ClientError {
   constructor(message: string) {
     super(message, ErrorTypes.NotFound);
   }
@@ -45,4 +57,6 @@ export {
   UnauthorizedError,
   NotfoundError,
   ErrorTypes,
+  ServerError,
+  ClientError,
 };

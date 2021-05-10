@@ -1,5 +1,12 @@
 import { Response } from 'express';
 
+interface ResponseFormat {
+  status: boolean;
+  message: string;
+  data?: unknown;
+  error?: unknown;
+}
+
 class HttpResponder {
   private res: Response;
 
@@ -11,12 +18,17 @@ class HttpResponder {
     status: boolean,
     message: string,
     data?: unknown
-  ): { status: boolean; message: string; data?: unknown } {
-    return {
+  ): ResponseFormat {
+    const payload: ResponseFormat = {
       status,
       message,
-      data,
     };
+    if (status) {
+      payload.data = data;
+    } else {
+      payload.error = data;
+    }
+    return payload;
   }
 
   success(code: number, message: string, data?: unknown): void {
