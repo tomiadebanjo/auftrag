@@ -8,7 +8,8 @@ describe('Orders controller tests', () => {
     const response = await request(app)
       .put('/orders/order-id')
       .set('Accept', 'application/json')
-      .set('Authorization', 'Bearer token');
+      .set('Authorization', 'Bearer token')
+      .send({ title: 'Update title', bookingDate: '1554284950023' });
 
     expect(response.status).toEqual(200);
     expect(response.body).toEqual({
@@ -40,7 +41,7 @@ describe('Orders controller tests', () => {
         },
         bookingDate: 1554284950023,
         customer: {
-          email: 'mock email',
+          email: 'mockemail@email.com',
           name: 'mock name',
           phone: 'mock phone',
         },
