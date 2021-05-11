@@ -1,10 +1,11 @@
 import React from 'react';
 import { Form, Input, Button, Typography } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { useHistory } from 'react-router';
 
 import styles from './index.module.css';
-import sideImage from '../../Assets/images/nick-perez-duvq92-VCZ4-unsplash.jpg';
-import { useHistory } from 'react-router';
+import Footer from 'Components/Footer';
+import sideImage from 'Assets/images/nick-perez-duvq92-VCZ4-unsplash.jpg';
 
 const { Title, Text } = Typography;
 
@@ -79,6 +80,7 @@ const Login = () => {
               </Form.Item>
             </Form>
           </div>
+          <Footer />
         </div>
       </section>
       <section className={styles.rightSection}>

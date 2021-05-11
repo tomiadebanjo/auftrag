@@ -1,0 +1,29 @@
+.headerWrapper {
+  padding: 0 7.5%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 85px;
+  background: white;
+}
+
+.headerLogo {
+  color: rgba(0, 0, 0, 0.85);
+  font-weight: 600;
+  font-size: 38px;
+  line-height: 1.23;
+}
+
+.userWrapper {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.userAvatar {
+  margin-right: 10px;
+}
+
+.userName {
+  margin-right: 10px;
+}
