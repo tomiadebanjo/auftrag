@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router';
-import { Typography, Card, Form, Input, Button, Switch } from 'antd';
+import { Card, Form, Input, Button, Switch } from 'antd';
 import { Link } from 'react-router-dom';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 
@@ -8,9 +8,8 @@ import Footer from 'Components/Footer';
 import NavBar from 'Components/Navbar';
 import styles from './index.module.css';
 
-const { Title } = Typography;
-
 const OrderDetailView = () => {
+  // eslint-disable-next-line no-unused-vars
   const { id } = useParams();
   const [editMode, setEditMode] = useState(false);
   const [initialValues] = useState({
