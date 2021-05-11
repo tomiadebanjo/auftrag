@@ -1,0 +1,42 @@
+.container {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.leftSection {
+  flex-basis: 50%;
+}
+
+.rightSection {
+  flex-basis: 50%;
+}
+
+.rightSection img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+.innerContainer {
+  padding: 80px 15% 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.subtitle {
+  margin-bottom: 14px;
+  font-size: 18px;
+}
+
+.formContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-top: 25vh;
+  height: 100%;
+}
+
+.loginForm_button {
+  width: 100%;
+}

@@ -1,0 +1,40 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #fafafa;
+}
+
+.topContent {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 35px;
+  margin-bottom: 20px;
+}
+
+.topContent_title {
+  line-height: 1;
+  font-weight: 400;
+  color: #6d6d6d;
+  font-size: 27px;
+  overflow-wrap: break-word;
+  margin: 0;
+}
+
+.mainContent {
+  flex: 1;
+  padding: 0 7.5%;
+}
+
+.mainContent_title {
+  margin-top: 20px;
+}
+
+.mainContent_title span {
+  font-weight: 400;
+  color: #6d6d6d;
+}
+
+.tableRow {
+  cursor: pointer;
+}
