@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 export const formatAddress = (address) => {
   if (address) {
     let addressData = [];
@@ -51,4 +53,30 @@ export const formatBookingDate = (bookingDate) => {
     }
   }
   return '--';
+};
+
+export const validateUnixTimestamp = (timestamp) =>
+  new Date(timestamp).getTime() > 0;
+
+export const formatOrderDetails = (order) => {
+  const { title, bookingDate, address, customer } = order;
+
+  const momentDate =
+    bookingDate || validateUnixTimestamp(bookingDate)
+      ? moment(bookingDate).format('YYYY-MM-DD')
+      : null;
+  let result = { title, bookingDate: momentDate };
+  if (address) {
+    result = {
+      ...result,
+      ...address,
+    };
+  }
+  if (customer) {
+    result = {
+      ...result,
+      ...customer,
+    };
+  }
+  return result;
 };

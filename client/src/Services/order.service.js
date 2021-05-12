@@ -1,3 +1,4 @@
+import { firestore } from 'Config/firebase';
 import Axios from './axiosInstance';
 
 export const updateOrder = async (orderId, data) => {
@@ -6,4 +7,8 @@ export const updateOrder = async (orderId, data) => {
     url: `/orders/${orderId}`,
     data,
   });
+};
+
+export const getOrderDocument = async (orderId) => {
+  return firestore.collection('orders').doc(orderId);
 };
