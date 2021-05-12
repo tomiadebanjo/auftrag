@@ -1,78 +1,82 @@
-import React, { useState } from 'react';
-import { Table } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Table, Alert } from 'antd';
 import { useHistory } from 'react-router';
 
 import Footer from 'Components/Footer';
 import NavBar from 'Components/Navbar';
 import styles from './index.module.css';
+import { firestore } from 'Config/firebase';
+import {
+  formatAddress,
+  formatBookingDate,
+  formatCustomer,
+  formatOrderData,
+  formatTitle,
+} from 'Utils/generalHelpers';
+import { loadingStateConstants } from 'Utils/constants';
 
 const columns = [
   {
     title: 'Title',
     dataIndex: 'title',
     width: '20%',
+    render: formatTitle,
   },
   {
     title: 'Booking Date',
     dataIndex: 'bookingDate',
     width: '15%',
+    render: formatBookingDate,
   },
   {
     title: 'Address',
     dataIndex: 'address',
-    render: (address) =>
-      `${address.city}, ${address.country}, ${address.street}, ${address.zip}`,
+    render: formatAddress,
   },
   {
     title: 'Customer',
     dataIndex: 'customer',
-    render: (customer) => `${customer.name}`,
+    render: formatCustomer,
     width: '20%',
   },
 ];
 
-const createData = () => {
-  let result = [];
-  for (let i = 0; i < 20; i++) {
-    result.push({
-      id: i + 1,
-      address: {
-        city: 'Berlin 235',
-        country: 'Germany 235',
-        street: 'Wriezener Str. 12 23',
-        zip: '13055',
-      },
-      bookingDate: 1554284950023,
-      customer: {
-        email: 'emad.alam124@construyo.de',
-        name: 'Emad Alam',
-        phone: '015252098067',
-      },
-      title: 'err title',
-    });
-  }
-  return result;
-};
-
 const OrdersView = () => {
   const history = useHistory();
-  // eslint-disable-next-line no-unused-vars
-  const [data, setData] = useState(createData());
-  // eslint-disable-next-line no-unused-vars
-  const [loading, setLoading] = useState(false);
-  // eslint-disable-next-line no-unused-vars
-  const [pagination, setPagination] = useState({ current: 1, pageSize: 10 });
-
-  const handleTableChange = () => {};
+  const [data, setData] = useState([]);
+  const [loadingState, setLoadingState] = useState(
+    loadingStateConstants.INITIAL
+  );
 
   const handleRowClick = (rowRecord) => {
     history.push(`/orders/${rowRecord.id}`);
   };
 
+  useEffect(() => {
+    setLoadingState(loadingStateConstants.REQUESTING);
+    const ordersSubscription = firestore.collection('orders').onSnapshot(
+      (snapshot) => {
+        const ordersData = snapshot.docs.map(formatOrderData);
+        setData(ordersData);
+        setLoadingState(loadingStateConstants.SUCCESS);
+      },
+      (error) => {
+        setLoadingState(loadingStateConstants.ERROR);
+      }
+    );
+
+    return () => {
+      ordersSubscription();
+    };
+  }, []);
+
   return (
     <div className={styles.container}>
       <NavBar />
       <main className={styles.mainContent}>
+        {loadingState === loadingStateConstants.ERROR && (
+          <Alert message="Error Fetching Orders" type="error" showIcon />
+        )}
         <div className={styles.topContent}>
           <h2 className={styles.topContent_title}>Orders</h2>
         </div>
@@ -82,9 +86,7 @@ const OrdersView = () => {
             columns={columns}
             rowKey={(record) => record.id}
             dataSource={data}
-            pagination={pagination}
-            loading={loading}
-            onChange={handleTableChange}
+            loading={loadingState === loadingStateConstants.REQUESTING}
             onRow={(record) => {
               return {
                 onClick: () => handleRowClick(record),

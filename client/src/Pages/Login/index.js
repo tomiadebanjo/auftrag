@@ -9,15 +9,9 @@ import Spinner from 'Components/Spinner';
 import sideImage from 'Assets/images/nick-perez-duvq92-VCZ4-unsplash.jpg';
 import { useUserState } from 'Context/user.context';
 import { auth } from 'Config/firebase';
+import { loadingStateConstants } from 'Utils/constants';
 
 const { Title, Text } = Typography;
-
-const loadingStateConstants = {
-  INITIAL: 'INITIAL',
-  REQUESTING: 'REQUESTING',
-  SUCCESS: 'SUCCESS',
-  ERROR: 'ERROR',
-};
 
 const Login = () => {
   const location = useLocation();
@@ -82,6 +76,7 @@ const Login = () => {
                 {alertMessage && (
                   <Alert
                     closable
+                    showIcon
                     message={alertMessage}
                     type={
                       loadingState === loadingStateConstants.ERROR
