@@ -5,24 +5,28 @@ import OrderDetailView from 'Pages/OrderDetailView';
 import OrdersView from 'Pages/OrdersView';
 import { UserProvider } from 'Context/user.context';
 import PrivateRoute from 'Components/PrivateRoute';
+import ServerDown from 'Pages/ServerDown';
 
 function App() {
   return (
-    <UserProvider>
-      <Router>
-        <Switch>
+    <Router>
+      <Switch>
+        <UserProvider>
           <PrivateRoute path="/orders/:id">
             <OrderDetailView />
           </PrivateRoute>
           <PrivateRoute path="/orders">
             <OrdersView />
           </PrivateRoute>
+          <Route exact path="/server-error">
+            <ServerDown />
+          </Route>
           <Route exact path="/">
             <Login />
           </Route>
-        </Switch>
-      </Router>
-    </UserProvider>
+        </UserProvider>
+      </Switch>
+    </Router>
   );
 }
 

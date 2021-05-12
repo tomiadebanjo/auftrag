@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useReducer } from 'react';
 import { auth, firestore } from 'Config/firebase';
 import { setAuthHeaders } from 'Utils/authHelpers';
+import { useHistory } from 'react-router';
 
 const UserStateContext = createContext();
 const UserDispatchContext = createContext();
@@ -27,6 +28,7 @@ function userReducer(state, action) {
 }
 
 const UserProvider = ({ children }) => {
+  const history = useHistory();
   const [state, dispatch] = useReducer(userReducer, {
     isAuthenticated: false,
     userLoading: true,
@@ -49,9 +51,10 @@ const UserProvider = ({ children }) => {
               payload: { token, user: userDoc },
             });
           })
-          .catch((error) =>
-            console.log(error, '++++ caught insert something went wrong page')
-          );
+          .catch((error) => {
+            console.log(error);
+            history.push('server-error');
+          });
       } else {
         dispatch({ type: 'LOG_OUT_USER' });
       }
@@ -60,7 +63,7 @@ const UserProvider = ({ children }) => {
     return () => {
       subscription();
     };
-  }, []);
+  }, [history]);
 
   return (
     <UserStateContext.Provider value={state}>
