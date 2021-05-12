@@ -1,91 +1,164 @@
-import React from 'react';
-import { Form, Input, Button, Typography } from 'antd';
+import React, { useState } from 'react';
+import { Form, Input, Button, Typography, Alert } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import { useHistory } from 'react-router';
+import { Redirect, useLocation } from 'react-router';
 
 import styles from './index.module.css';
 import Footer from 'Components/Footer';
+import Spinner from 'Components/Spinner';
 import sideImage from 'Assets/images/nick-perez-duvq92-VCZ4-unsplash.jpg';
+import { useUserState } from 'Context/user.context';
+import { auth } from 'Config/firebase';
 
 const { Title, Text } = Typography;
 
+const loadingStateConstants = {
+  INITIAL: 'INITIAL',
+  REQUESTING: 'REQUESTING',
+  SUCCESS: 'SUCCESS',
+  ERROR: 'ERROR',
+};
+
 const Login = () => {
-  const history = useHistory();
-  const onFinish = (values) => {
-    console.log('Received values of form: ', values);
-    history.push('/orders');
+  const location = useLocation();
+  const { isAuthenticated, userLoading } = useUserState();
+  const [loadingState, setLoadingState] = useState(
+    loadingStateConstants.INITIAL
+  );
+  const [alertMessage, setAlertMessage] = useState(null);
+
+  const clearError = () => {
+    setAlertMessage(null);
   };
+
+  const handleError = (error) => {
+    console.log(error);
+    setLoadingState(loadingStateConstants.ERROR);
+    let errorMessage = 'Login failed, please try again';
+    switch (error.code) {
+      case 'auth/user-disabled':
+        errorMessage = 'Your account has been disabled';
+        break;
+      case 'auth/wrong-password':
+      case 'auth/user-not-found':
+      case 'auth/invalid-email':
+        errorMessage = 'Invalid credentials';
+        break;
+
+      default:
+        break;
+    }
+    setAlertMessage(errorMessage);
+  };
+
+  const handleLogin = async (values) => {
+    try {
+      setLoadingState(loadingStateConstants.REQUESTING);
+      const { email, password } = values;
+      await auth.signInWithEmailAndPassword(email, password);
+
+      setAlertMessage('Login successful, redirecting.');
+      setLoadingState(loadingStateConstants.SUCCESS);
+    } catch (error) {
+      handleError(error);
+    }
+  };
+
+  if (isAuthenticated) {
+    let { from } = location.state || { from: { pathname: '/orders' } };
+    return <Redirect to={from} />;
+  }
 
   return (
     <main className={styles.container}>
-      <section className={styles.leftSection}>
-        <div className={styles.innerContainer}>
-          <Title>Auftrag</Title>
-          <div className={styles.formContainer}>
-            <Text className={styles.subtitle}>
-              Welcome back, please login to your account
-            </Text>
-            <Form
-              name="login-form"
-              initialValues={{
-                remember: true,
-              }}
-              onFinish={onFinish}
-            >
-              <Form.Item
-                name="email"
-                rules={[
-                  {
-                    type: 'email',
-                    message: 'The input is not valid E-mail!',
-                  },
-                  {
-                    required: true,
-                    message: 'Please input your Email!',
-                  },
-                ]}
-              >
-                <Input
-                  prefix={<UserOutlined className="site-form-item-icon" />}
-                  placeholder="Email"
-                  size="large"
-                />
-              </Form.Item>
-              <Form.Item
-                name="password"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please input your Password!',
-                  },
-                ]}
-              >
-                <Input
-                  prefix={<LockOutlined className="site-form-item-icon" />}
-                  type="password"
-                  placeholder="Password"
-                  size="large"
-                />
-              </Form.Item>
+      {userLoading ? (
+        <Spinner />
+      ) : (
+        <>
+          <section className={styles.leftSection}>
+            <div className={styles.innerContainer}>
+              <Title>Auftrag</Title>
+              <div className={styles.formContainer}>
+                {alertMessage && (
+                  <Alert
+                    closable
+                    message={alertMessage}
+                    type={
+                      loadingState === loadingStateConstants.ERROR
+                        ? 'error'
+                        : 'success'
+                    }
+                    onClose={clearError}
+                  />
+                )}
 
-              <Form.Item>
-                <Button
-                  type="primary"
-                  htmlType="submit"
-                  size="large"
-                  className={styles.loginForm_button}
+                <Text className={styles.subtitle}>
+                  Welcome back, please login to your account
+                </Text>
+                <Form
+                  name="login-form"
+                  onFinish={handleLogin}
+                  onValuesChange={clearError}
                 >
-                  Log in
-                </Button>
-              </Form.Item>
-            </Form>
-          </div>
-          <Footer />
-        </div>
-      </section>
-      <section className={styles.rightSection}>
-        <img alt="side" src={sideImage} />
-      </section>
+                  <Form.Item
+                    name="email"
+                    rules={[
+                      {
+                        type: 'email',
+                        message: 'The input is not valid E-mail!',
+                      },
+                      {
+                        required: true,
+                        message: 'Please input your Email!',
+                      },
+                    ]}
+                  >
+                    <Input
+                      prefix={<UserOutlined className="site-form-item-icon" />}
+                      placeholder="Email"
+                      size="large"
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    name="password"
+                    rules={[
+                      {
+                        required: true,
+                        message: 'Please input your Password!',
+                      },
+                    ]}
+                  >
+                    <Input
+                      prefix={<LockOutlined className="site-form-item-icon" />}
+                      type="password"
+                      placeholder="Password"
+                      size="large"
+                    />
+                  </Form.Item>
+
+                  <Form.Item>
+                    <Button
+                      type="primary"
+                      htmlType="submit"
+                      size="large"
+                      className={styles.loginForm_button}
+                      loading={
+                        loadingState === loadingStateConstants.REQUESTING
+                      }
+                    >
+                      Log in
+                    </Button>
+                  </Form.Item>
+                </Form>
+              </div>
+              <Footer />
+            </div>
+          </section>
+          <section className={styles.rightSection}>
+            <img alt="side" src={sideImage} />
+          </section>
+        </>
+      )}
     </main>
   );
 };

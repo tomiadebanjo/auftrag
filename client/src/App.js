@@ -3,22 +3,26 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Login from 'Pages/Login';
 import OrderDetailView from 'Pages/OrderDetailView';
 import OrdersView from 'Pages/OrdersView';
+import { UserProvider } from 'Context/user.context';
+import PrivateRoute from 'Components/PrivateRoute';
 
 function App() {
   return (
-    <Router>
-      <Switch>
-        <Route path="/orders/:id">
-          <OrderDetailView />
-        </Route>
-        <Route path="/orders">
-          <OrdersView />
-        </Route>
-        <Route exact path="/">
-          <Login />
-        </Route>
-      </Switch>
-    </Router>
+    <UserProvider>
+      <Router>
+        <Switch>
+          <PrivateRoute path="/orders/:id">
+            <OrderDetailView />
+          </PrivateRoute>
+          <PrivateRoute path="/orders">
+            <OrdersView />
+          </PrivateRoute>
+          <Route exact path="/">
+            <Login />
+          </Route>
+        </Switch>
+      </Router>
+    </UserProvider>
   );
 }
 

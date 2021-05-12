@@ -25,6 +25,7 @@
   flex-direction: column;
 }
 .subtitle {
+  margin-top: 14px;
   margin-bottom: 14px;
   font-size: 18px;
 }
