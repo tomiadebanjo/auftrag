@@ -1,0 +1,38 @@
+.container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.container h1 {
+  margin: 40px 0 5px;
+  font-size: 40px;
+  font-weight: 400;
+}
+
+.container p {
+  font-size: 20px;
+  font-weight: 300;
+}
+
+.container svg {
+  width: 55%;
+  height: 55%;
+}
+
+.topContent {
+  position: absolute;
+  top: 7.5%;
+  left: 7.5%;
+}
+
+.topContent_title {
+  overflow-wrap: break-word;
+  margin: 0;
+  color: rgba(0, 0, 0, 0.85);
+  font-weight: 600;
+  font-size: 38px;
+  line-height: 1.23;
+}
