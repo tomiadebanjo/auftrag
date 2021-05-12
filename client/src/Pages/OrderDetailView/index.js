@@ -35,11 +35,9 @@ const OrderDetailView = () => {
   const handleUpdate = async (values) => {
     try {
       const { title, bookingDate } = values;
-      console.log({ values });
       await updateOrder(id, { title, bookingDate });
       message.success('Order update successful', 3);
     } catch (error) {
-      console.log(error);
       message.error('Order update failed', 3);
     }
   };
@@ -78,7 +76,7 @@ const OrderDetailView = () => {
           }
         },
         (error) => {
-          console.log(error);
+          message.error('Error fetching order', 3);
         }
       );
     }
@@ -132,7 +130,6 @@ const OrderDetailView = () => {
                   size="large"
                   style={{ width: '100%' }}
                   allowClear={false}
-                  // disabled={!editMode}
                 />
               ) : (
                 <Input size="large" readOnly={true} />
