@@ -48,7 +48,10 @@ const UserProvider = ({ children }) => {
               type: 'SET_LOGGED_IN_USER',
               payload: { token, user: userDoc },
             });
-          });
+          })
+          .catch((error) =>
+            console.log(error, '++++ caught insert something went wrong page')
+          );
       } else {
         dispatch({ type: 'LOG_OUT_USER' });
       }

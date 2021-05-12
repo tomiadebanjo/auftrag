@@ -1,30 +1,93 @@
-import React, { useState } from 'react';
-import { useParams } from 'react-router';
-import { Card, Form, Input, Button, Switch } from 'antd';
+import React, { useEffect, useState, useCallback } from 'react';
+import { useHistory, useParams } from 'react-router';
+import { Card, Form, Input, Button, Switch, message, DatePicker } from 'antd';
 import { Link } from 'react-router-dom';
 import { ArrowLeftOutlined } from '@ant-design/icons';
+import moment from 'moment';
 
 import Footer from 'Components/Footer';
 import NavBar from 'Components/Navbar';
 import styles from './index.module.css';
+import { getOrderDocument, updateOrder } from 'Services/order.service';
+import {
+  formatOrderDetails,
+  validateUnixTimestamp,
+} from 'Utils/generalHelpers';
 
 const OrderDetailView = () => {
-  // eslint-disable-next-line no-unused-vars
+  const history = useHistory();
   const { id } = useParams();
   const [editMode, setEditMode] = useState(false);
-  const [initialValues] = useState({
-    city: 'Berlin 235',
-    country: 'Germany 235',
-    street: 'Wriezener Str. 12 23',
-    zip: '13055',
-    bookingDate: 1554284950023,
-    email: 'emad.alam124@construyo.de',
-    name: 'Emad Alam',
-    phone: '015252098067',
-    title: 'err title',
-  });
+  const [form] = Form.useForm();
 
-  const onFinish = () => {};
+  const handleInvalidOrder = useCallback(() => {
+    message.error('Order does not exist', 3);
+    history.push('/orders');
+  }, [history]);
+
+  const updateFormValues = useCallback(
+    (values) => {
+      form.setFieldsValue(values);
+    },
+    [form]
+  );
+
+  const handleUpdate = async (values) => {
+    try {
+      const { title, bookingDate } = values;
+      console.log({ values });
+      await updateOrder(id, { title, bookingDate });
+      message.success('Order update successful', 3);
+    } catch (error) {
+      console.log(error);
+      message.error('Order update failed', 3);
+    }
+  };
+
+  const updateEditMode = (value) => {
+    const fields = form.getFieldsValue();
+    if (value) {
+      updateFormValues({
+        ...fields,
+        bookingDate: validateUnixTimestamp(fields.bookingDate)
+          ? moment(fields.bookingDate)
+          : null,
+      });
+    } else {
+      updateFormValues({
+        ...fields,
+        bookingDate: validateUnixTimestamp(fields.bookingDate)
+          ? moment(fields.bookingDate).format('YYYY-MM-DD')
+          : null,
+      });
+    }
+    setEditMode(value);
+  };
+
+  useEffect(() => {
+    let subscription;
+    async function fetchOrder() {
+      const order = await getOrderDocument(id);
+      subscription = order.onSnapshot(
+        (snapshot) => {
+          if (snapshot.exists) {
+            const formattedData = formatOrderDetails(snapshot.data());
+            updateFormValues(formattedData);
+          } else {
+            handleInvalidOrder();
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    }
+
+    fetchOrder();
+    return () => {
+      subscription();
+    };
+  }, [handleInvalidOrder, id, updateFormValues]);
 
   return (
     <div className={styles.container}>
@@ -41,15 +104,16 @@ const OrderDetailView = () => {
           <div className={styles.switchContainer}>
             <Switch
               checked={editMode}
-              onChange={(value) => setEditMode(value)}
+              onChange={(value) => updateEditMode(value)}
             />
             <span className={styles.switchContainer_text}>Edit Mode</span>
           </div>
           <Form
             layout="vertical"
-            initialValues={{ ...initialValues }}
-            onFinish={onFinish}
+            onFinish={handleUpdate}
+            initialValues={{}}
             className={styles.formContainer}
+            form={form}
           >
             <Form.Item
               label="Order Title"
@@ -63,7 +127,16 @@ const OrderDetailView = () => {
               className={styles.formItem}
               name="bookingDate"
             >
-              <Input size="large" readOnly={!editMode} />
+              {editMode ? (
+                <DatePicker
+                  size="large"
+                  style={{ width: '100%' }}
+                  allowClear={false}
+                  // disabled={!editMode}
+                />
+              ) : (
+                <Input size="large" readOnly={true} />
+              )}
             </Form.Item>
             <Form.Item label="Name" name="name" className={styles.formItem_sm}>
               <Input size="large" readOnly disabled={editMode} />
