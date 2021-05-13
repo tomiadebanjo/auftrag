@@ -6,7 +6,8 @@ import { Redirect, useLocation } from 'react-router';
 import styles from './index.module.css';
 import Footer from 'Components/Footer';
 import Spinner from 'Components/Spinner';
-import sideImage from 'Assets/images/nick-perez-duvq92-VCZ4-unsplash.jpg';
+import sideImage from 'Assets/images/login-unsplash.jpg';
+import sideImageWebp from 'Assets/images/login-unsplash.webp';
 import { useUserState } from 'Context/user.context';
 import { auth } from 'Config/firebase';
 import { loadingStateConstants } from 'Utils/constants';
@@ -150,7 +151,14 @@ const Login = () => {
             </div>
           </section>
           <section className={styles.rightSection}>
-            <img alt="side" src={sideImage} />
+            <picture>
+              <source
+                srcSet={sideImageWebp}
+                type="image/webp"
+                alt="beach line"
+              />
+              <img alt="beach line" src={sideImage} />
+            </picture>
           </section>
         </>
       )}

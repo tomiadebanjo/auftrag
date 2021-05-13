@@ -20,3 +20,14 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* custom ant design date picker styles */
+.ant-picker .ant-picker-input input[disabled] {
+  color: black;
+  cursor: text;
+}
+
+.ant-form-item-control-input-content .ant-picker.ant-picker-disabled {
+  background-color: white;
+  cursor: text;
+}

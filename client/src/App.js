@@ -6,24 +6,27 @@ import OrdersView from 'Pages/OrdersView';
 import { UserProvider } from 'Context/user.context';
 import PrivateRoute from 'Components/PrivateRoute';
 import ServerDown from 'Pages/ServerDown';
+import { OrderProvider } from 'Context/order.context';
 
 function App() {
   return (
     <Router>
       <Switch>
         <UserProvider>
-          <PrivateRoute path="/orders/:id">
-            <OrderDetailView />
-          </PrivateRoute>
-          <PrivateRoute path="/orders">
-            <OrdersView />
-          </PrivateRoute>
-          <Route exact path="/server-error">
-            <ServerDown />
-          </Route>
-          <Route exact path="/">
-            <Login />
-          </Route>
+          <OrderProvider>
+            <PrivateRoute exact path="/orders">
+              <OrdersView />
+            </PrivateRoute>
+            <PrivateRoute path="/orders/:id">
+              <OrderDetailView />
+            </PrivateRoute>
+            <Route exact path="/server-error">
+              <ServerDown />
+            </Route>
+            <Route exact path="/">
+              <Login />
+            </Route>
+          </OrderProvider>
         </UserProvider>
       </Switch>
     </Router>

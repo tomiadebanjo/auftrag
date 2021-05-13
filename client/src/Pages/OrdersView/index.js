@@ -1,19 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import { Table, Alert } from 'antd';
 import { useHistory } from 'react-router';
 
 import Footer from 'Components/Footer';
 import NavBar from 'Components/Navbar';
 import styles from './index.module.css';
-import { firestore } from 'Config/firebase';
 import {
   formatAddress,
   formatBookingDate,
   formatCustomer,
-  formatOrderData,
   formatTitle,
 } from 'Utils/generalHelpers';
 import { loadingStateConstants } from 'Utils/constants';
+import { OrderContext } from 'Context/order.context';
 
 const columns = [
   {
@@ -42,33 +41,12 @@ const columns = [
 ];
 
 const OrdersView = () => {
+  const { orders, loadingState } = useContext(OrderContext);
   const history = useHistory();
-  const [data, setData] = useState([]);
-  const [loadingState, setLoadingState] = useState(
-    loadingStateConstants.INITIAL
-  );
 
   const handleRowClick = (rowRecord) => {
     history.push(`/orders/${rowRecord.id}`);
   };
-
-  useEffect(() => {
-    setLoadingState(loadingStateConstants.REQUESTING);
-    const ordersSubscription = firestore.collection('orders').onSnapshot(
-      (snapshot) => {
-        const ordersData = snapshot.docs.map(formatOrderData);
-        setData(ordersData);
-        setLoadingState(loadingStateConstants.SUCCESS);
-      },
-      (error) => {
-        setLoadingState(loadingStateConstants.ERROR);
-      }
-    );
-
-    return () => {
-      ordersSubscription();
-    };
-  }, []);
 
   return (
     <div className={styles.container}>
@@ -85,7 +63,7 @@ const OrdersView = () => {
           <Table
             columns={columns}
             rowKey={(record) => record.id}
-            dataSource={data}
+            dataSource={orders}
             loading={loadingState === loadingStateConstants.REQUESTING}
             onRow={(record) => {
               return {

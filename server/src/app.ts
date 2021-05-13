@@ -6,20 +6,18 @@ import cors from 'cors';
 import errorHandler from './middleware/errorHandler';
 import HttpResponder from './utils/HttpResponder';
 import routes from './routes';
-import AppSecrets from './utils/secrets';
 
 dotenv.config();
 
 const app: Express = express();
 
-// const { PORT } = AppSecrets;
 const PORT = process.env.PORT || 4000;
 
 app.set('port', PORT);
 
 app.use(cors());
-
 app.use(helmet());
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
