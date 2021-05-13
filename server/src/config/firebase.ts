@@ -6,7 +6,7 @@ const config = {
   projectId: AppSecrets.FIREBASE_PROJECT_ID,
   privateKeyId: AppSecrets.FIREBASE_PRIVATE_KEY_ID,
   privateKey:
-    AppSecrets.FIREBASE_PRIVATE_KEY === '-'
+    AppSecrets.FIREBASE_PRIVATE_KEY[0] === '-'
       ? AppSecrets.FIREBASE_PRIVATE_KEY
       : JSON.parse(AppSecrets.FIREBASE_PRIVATE_KEY),
   clientEmail: AppSecrets.FIREBASE_CLIENT_EMAIL,
