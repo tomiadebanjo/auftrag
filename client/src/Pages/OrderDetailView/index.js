@@ -34,6 +34,7 @@ const OrderDetailView = () => {
       updateEditMode(false);
       message.success('Order update successful', 3);
     } catch (error) {
+      console.log(error);
       message.error('Order update failed', 3);
     }
   };
@@ -97,6 +98,13 @@ const OrderDetailView = () => {
               label="Order Title"
               className={styles.formItem}
               name="title"
+              rules={[
+                {
+                  whitespace: true,
+                  required: true,
+                  message: 'Please input your order title!',
+                },
+              ]}
             >
               <Input size="large" readOnly={!editMode} />
             </Form.Item>
@@ -104,6 +112,13 @@ const OrderDetailView = () => {
               label="Booking Date"
               className={styles.formItem}
               name="bookingDate"
+              rules={[
+                {
+                  whitespace: true,
+                  required: true,
+                  message: 'Please input your booking date',
+                },
+              ]}
             >
               <DatePicker
                 size="large"
