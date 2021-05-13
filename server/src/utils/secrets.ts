@@ -6,7 +6,6 @@ dotenv.config();
 const getSecretAndThrowIfUndefined = (secret: string) => {
   const value = process.env[secret];
   if (!value) {
-    logger.info(value);
     logger.error(`Please set ${secret} environment variable`);
     process.exit(1);
   }
