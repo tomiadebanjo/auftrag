@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, Typography, Alert } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import { Redirect, useLocation } from 'react-router';
+import { Redirect, useLocation } from 'react-router-dom';
 
 import styles from './index.module.css';
 import Footer from 'Components/Footer';
