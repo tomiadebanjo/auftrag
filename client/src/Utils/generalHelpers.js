@@ -61,10 +61,9 @@ export const validateUnixTimestamp = (timestamp) =>
 export const formatOrderDetails = (order) => {
   const { title, bookingDate, address, customer } = order;
 
-  const momentDate =
-    bookingDate || validateUnixTimestamp(bookingDate)
-      ? moment(bookingDate).format('YYYY-MM-DD')
-      : null;
+  const isDateValid = bookingDate && validateUnixTimestamp(bookingDate);
+  const momentDate = isDateValid ? moment(bookingDate) : null;
+
   let result = { title, bookingDate: momentDate };
   if (address) {
     result = {

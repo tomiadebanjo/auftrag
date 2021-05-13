@@ -14,11 +14,11 @@ function App() {
       <Switch>
         <UserProvider>
           <OrderProvider>
+            <PrivateRoute exact path="/orders">
+              <OrdersView />
+            </PrivateRoute>
             <PrivateRoute path="/orders/:id">
               <OrderDetailView />
-            </PrivateRoute>
-            <PrivateRoute path="/orders">
-              <OrdersView />
             </PrivateRoute>
             <Route exact path="/server-error">
               <ServerDown />

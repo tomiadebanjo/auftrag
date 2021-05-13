@@ -153,7 +153,7 @@ const Login = () => {
           <section className={styles.rightSection}>
             <picture>
               <source
-                srcset={sideImageWebp}
+                srcSet={sideImageWebp}
                 type="image/webp"
                 alt="beach line"
               />

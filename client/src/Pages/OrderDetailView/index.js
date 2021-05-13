@@ -3,7 +3,6 @@ import { useHistory, useParams } from 'react-router';
 import { Card, Form, Input, Button, Switch, message, DatePicker } from 'antd';
 import { Link } from 'react-router-dom';
 import { ArrowLeftOutlined } from '@ant-design/icons';
-import moment from 'moment';
 
 import Footer from 'Components/Footer';
 import NavBar from 'Components/Navbar';
@@ -11,7 +10,6 @@ import styles from './index.module.css';
 import { getOrderDocument, updateOrder } from 'Services/order.service';
 import {
   formatOrderDetails,
-  validateUnixTimestamp,
 } from 'Utils/generalHelpers';
 
 const OrderDetailView = () => {
@@ -35,7 +33,8 @@ const OrderDetailView = () => {
   const handleUpdate = async (values) => {
     try {
       const { title, bookingDate } = values;
-      await updateOrder(id, { title, bookingDate });
+      await updateOrder(id, { title, bookingDate: bookingDate.valueOf() });
+      updateEditMode(false)
       message.success('Order update successful', 3);
     } catch (error) {
       message.error('Order update failed', 3);
@@ -43,22 +42,6 @@ const OrderDetailView = () => {
   };
 
   const updateEditMode = (value) => {
-    const fields = form.getFieldsValue();
-    if (value) {
-      updateFormValues({
-        ...fields,
-        bookingDate: validateUnixTimestamp(fields.bookingDate)
-          ? moment(fields.bookingDate)
-          : null,
-      });
-    } else {
-      updateFormValues({
-        ...fields,
-        bookingDate: validateUnixTimestamp(fields.bookingDate)
-          ? moment(fields.bookingDate).format('YYYY-MM-DD')
-          : null,
-      });
-    }
     setEditMode(value);
   };
 
@@ -125,15 +108,13 @@ const OrderDetailView = () => {
               className={styles.formItem}
               name="bookingDate"
             >
-              {editMode ? (
-                <DatePicker
-                  size="large"
-                  style={{ width: '100%' }}
-                  allowClear={false}
-                />
-              ) : (
-                <Input size="large" readOnly={true} />
-              )}
+              <DatePicker
+                size="large"
+                style={{ width: '100%' }}
+                allowClear={false}
+                disabled={!editMode}
+                className={styles.datePicker}
+              />
             </Form.Item>
             <Form.Item label="Name" name="name" className={styles.formItem_sm}>
               <Input size="large" readOnly disabled={editMode} />
