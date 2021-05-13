@@ -8,9 +8,7 @@ import Footer from 'Components/Footer';
 import NavBar from 'Components/Navbar';
 import styles from './index.module.css';
 import { getOrderDocument, updateOrder } from 'Services/order.service';
-import {
-  formatOrderDetails,
-} from 'Utils/generalHelpers';
+import { formatOrderDetails } from 'Utils/generalHelpers';
 
 const OrderDetailView = () => {
   const history = useHistory();
@@ -34,7 +32,7 @@ const OrderDetailView = () => {
     try {
       const { title, bookingDate } = values;
       await updateOrder(id, { title, bookingDate: bookingDate.valueOf() });
-      updateEditMode(false)
+      updateEditMode(false);
       message.success('Order update successful', 3);
     } catch (error) {
       message.error('Order update failed', 3);

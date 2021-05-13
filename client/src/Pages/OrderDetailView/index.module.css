@@ -71,3 +71,24 @@
   width: 10%;
   float: right;
 }
+
+@media screen and (max-width: 768px) {
+  .formItem,
+  .formItem_sm {
+    flex-basis: 100%;
+  }
+
+  .formItem_button {
+    width: 100%;
+    float: none;
+  }
+
+  .topContent {
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .topContent_link {
+    margin-top: 10px;
+  }
+}

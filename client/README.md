@@ -1,6 +1,15 @@
-# Getting Started with Create React App
+# Auftrag Client
+Order Management Platform
+
+`Hosted Frontend URL` - https://keen-darwin-8b0a4a.netlify.app
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+## Technologies
+
+- React
+- Firebase Client SDK
+- Ant Design
 
 ## Available Scripts
 
