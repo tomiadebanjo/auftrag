@@ -42,3 +42,13 @@
 .loginForm_button {
   width: 100%;
 }
+
+@media screen and (max-width: 768px) {
+  .leftSection {
+    flex-basis: 100%;
+  }
+
+  .rightSection {
+    display: none;
+  }
+}

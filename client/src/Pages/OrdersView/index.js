@@ -31,6 +31,7 @@ const columns = [
     title: 'Address',
     dataIndex: 'address',
     render: formatAddress,
+    responsive: ['md'],
   },
   {
     title: 'Customer',
