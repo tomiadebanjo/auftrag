@@ -1,4 +1,5 @@
 import admin from 'firebase-admin';
+import logger from '../utils/logger';
 import AppSecrets from '../utils/secrets';
 
 const config = {
@@ -13,6 +14,8 @@ const config = {
   auth_provider_x509_cert_url: AppSecrets.FIREBASE_AUTH_PROVIDER_X509_CERT_URL,
   client_x509_cert_url: AppSecrets.FIREBASE_CLIENT_X509_CERT_URL,
 };
+
+logger.info(config.privateKey);
 
 admin.initializeApp({
   credential: admin.credential.cert(config),
