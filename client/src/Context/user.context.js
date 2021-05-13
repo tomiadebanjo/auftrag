@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useReducer } from 'react';
 import { auth, firestore } from 'Config/firebase';
 import { setAuthHeaders } from 'Utils/authHelpers';
-import { useHistory } from 'react-router';
+import { useHistory } from 'react-router-dom';
 import { message } from 'antd';
 
 const UserStateContext = createContext();
@@ -44,7 +44,10 @@ const UserProvider = ({ children }) => {
     const subscription = auth.onAuthStateChanged(async (user) => {
       if (user) {
         const token = await auth.currentUser.getIdToken();
-
+        dispatch({
+          type: 'SET_LOGGED_IN_USER',
+          payload: { token, user: {} },
+        });
         firestore
           .collection('users')
           .doc(user.uid)

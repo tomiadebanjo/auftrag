@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { useHistory, useParams } from 'react-router';
+import { useHistory, useParams, Link } from 'react-router-dom';
 import { Card, Form, Input, Button, Switch, message, DatePicker } from 'antd';
-import { Link } from 'react-router-dom';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 
 import Footer from 'Components/Footer';
