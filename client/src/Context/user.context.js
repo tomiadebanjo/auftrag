@@ -58,7 +58,7 @@ const UserProvider = ({ children }) => {
           })
           .catch((error) => {
             console.log(error);
-            message.error('500 Server Error: Firebase Quota Exceeded');
+            message.error('Server Error: Firebase Quota Exceeded');
             dispatch({ type: 'QUOTA_EXCEEDED_ERROR' });
           });
       } else {
