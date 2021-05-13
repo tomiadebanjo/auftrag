@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useReducer } from 'react';
 import { auth, firestore } from 'Config/firebase';
 import { setAuthHeaders } from 'Utils/authHelpers';
 import { useHistory } from 'react-router';
+import { message } from 'antd';
 
 const UserStateContext = createContext();
 const UserDispatchContext = createContext();
@@ -19,6 +20,10 @@ function userReducer(state, action) {
     case 'LOG_OUT_USER': {
       setAuthHeaders(null);
       return { ...state, isAuthenticated: false, userLoading: false };
+    }
+
+    case 'QUOTA_EXCEEDED_ERROR': {
+      return { ...state, userLoading: false };
     }
 
     default: {
@@ -53,7 +58,8 @@ const UserProvider = ({ children }) => {
           })
           .catch((error) => {
             console.log(error);
-            history.push('server-error');
+            message.error('500 Server Error: Firebase Quota Exceeded');
+            dispatch({ type: 'QUOTA_EXCEEDED_ERROR' });
           });
       } else {
         dispatch({ type: 'LOG_OUT_USER' });
