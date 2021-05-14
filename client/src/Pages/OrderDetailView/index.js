@@ -14,6 +14,7 @@ const OrderDetailView = () => {
   const { id } = useParams();
   const [editMode, setEditMode] = useState(false);
   const [form] = Form.useForm();
+  const [loading, setLoading] = useState(false);
 
   const handleInvalidOrder = useCallback(() => {
     message.error('Order does not exist', 3);
@@ -29,11 +30,14 @@ const OrderDetailView = () => {
 
   const handleUpdate = async (values) => {
     try {
+      setLoading(true);
       const { title, bookingDate } = values;
       await updateOrder(id, { title, bookingDate: bookingDate.valueOf() });
       updateEditMode(false);
+      setLoading(false);
       message.success('Order update successful', 3);
     } catch (error) {
+      setLoading(false);
       console.log(error);
       message.error('Order update failed', 3);
     }
@@ -114,7 +118,6 @@ const OrderDetailView = () => {
               name="bookingDate"
               rules={[
                 {
-                  whitespace: true,
                   required: true,
                   message: 'Please input your booking date',
                 },
@@ -168,6 +171,7 @@ const OrderDetailView = () => {
                   htmlType="submit"
                   size="large"
                   className={styles.formItem_button}
+                  loading={loading}
                 >
                   Update
                 </Button>
