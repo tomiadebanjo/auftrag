@@ -21,7 +21,7 @@ export const formatAddress = (address) => {
 
 export const formatOrderData = (item) => {
   return {
-    id: item.id,
+    uid: item.id,
     ...item.data(),
   };
 };

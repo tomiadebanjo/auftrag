@@ -46,7 +46,7 @@ const OrdersView = () => {
   const history = useHistory();
 
   const handleRowClick = (rowRecord) => {
-    history.push(`/orders/${rowRecord.id}`);
+    history.push(`/orders/${rowRecord.uid}`);
   };
 
   return (
@@ -63,7 +63,7 @@ const OrdersView = () => {
         <div className={styles.tableContainer}>
           <Table
             columns={columns}
-            rowKey={(record) => record.id}
+            rowKey={(record) => record.uid}
             dataSource={orders}
             loading={loadingState === loadingStateConstants.REQUESTING}
             onRow={(record) => {
